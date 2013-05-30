@@ -14,9 +14,9 @@ function Iso(){
 	
 	
 
-	 var layerHeight = 400;
-	 var layerWidth = 300;
-	 layer = new Layer("canvas", layerWidth, layerHeight);
+    var layerHeight = 400;
+    var layerWidth = 300;
+    layer = new Layer("canvas", layerWidth, layerHeight);
 	
 	backLayer = new Layer("backCanvas", layerWidth, layerHeight);
 	
@@ -36,19 +36,16 @@ function Iso(){
 	
 	iso.buildMap(map);
 	
-	layer.addEventListener(MouseEvent.MOUSE_DOWN, function(e){
+	layer.addListener(MouseEvent.MOUSE_DOWN, function(e){
 		iso.getTarget();
 	});
 
-	layer.addEventListener(Event.ENTER_FRAME, function(){
+	layer.addListener(Event.ENTER_FRAME, function(){
 		iso.update();
 	});
 	
 	
 }
-
-
-
 
 function IsoCanvas(){
 	
@@ -207,29 +204,18 @@ function IsoCanvas(){
 // 	return (true);
 // }
 	this.getTarget = function(){
-		
-
 		var tile = "t_" + (mapObject.mouseY) + "_" + (mapObject.mouseX)
-		trace(tile);
-
 		//must click on walkable tile
-		try{
-			if (mapObject[tile].walkable)
-			{
-				//update target tile
-				mapObject.targetX = mapObject.mouseX;
-				mapObject.targetY = mapObject.mouseY;
-				//get moving
-				//char.moving = true;
-
-
-				trace(tile);
-			}
-
-
-		}catch(e){
-			trace(e)
-		}
+        if(mapObject[tile] == undefined)
+            return;
+        if (mapObject[tile].walkable)
+        {
+            //update target tile
+            mapObject.targetX = mapObject.mouseX;
+            mapObject.targetY = mapObject.mouseY;
+            //get moving
+            //char.moving = true;
+        }
 	}
 	this.update = function(){
 		
@@ -244,7 +230,7 @@ function IsoCanvas(){
 		mapObject.mouseX = Math.round(mouseX/mapObject.tileW) - 1;
 
 		var tile = "t_" + (mapObject.mouseY) + "_" + (mapObject.mouseX);
-
+        
 		try{
 			if(mapObject[tile].walkable){
 				mouse.x = (mapObject.mouseX - mapObject.mouseY) * mapObject.tileW;

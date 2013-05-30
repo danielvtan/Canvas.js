@@ -1,13 +1,10 @@
-/**
-*	eleven js
-*	@author Daniel Tan
-*   @email daniel@eleventap.com
-*	
-*/	
-Layer.prototype = new EventDispatcher();
-Layer.prototype.constructor = Layer;
-function Layer(canvasID, layerWidth, layerHeight){
 
+function Layer(canvasID, layerWidth, layerHeight){
+    Layer.prototype = new EventDispatcher();
+    Layer.prototype.constructor = Layer;
+    EventDispatcher.apply(this, arguments);
+    
+   
     
     var gameEvents = new Array();
   	
@@ -20,7 +17,6 @@ function Layer(canvasID, layerWidth, layerHeight){
     var thisClass = this;
 
 	var canvas = document.getElementById(canvasID);
-	
 	var frames;
 	var context2D;
 	
@@ -35,94 +31,35 @@ function Layer(canvasID, layerWidth, layerHeight){
 	
 	var requestAnimation;
 	
-	
+    this.mouseX;
+    this.mouseY;
+    
 	this.renderer;
    
-	this.getMouse = function(e){
-		var mouse = new Object();
-		mouse.x = e.pageX - offSetX;
-		mouse.y = e.pageY - offSetY;	
-		/*if (!isIE) {
-			mouse.x = e.pageX - offSetX;
-			mouse.y = e.pageY - offSetY;
-		}else{
-			mouse.x = event.x;
-			mouse.y = event.y;
-		}*/
-		
-		thisClass.mouseX = mouse.x;
-		thisClass.mouseY = mouse.y;	
-		
-		return mouse;
-	};
-	this.addEventListener = function(eventType, eventReciever){
-        	
-        if(eventType == Event.ENTER_FRAME){
-            gameEvents.push(eventReciever);
-			
-			if(gameEvents.length == 1){
-
-				//if(window[requestAnimation]){
-				//	window[requestAnimation](thisClass.draw);
-				//}else{
-				//	
-				//}
-				
-				//renderer.
-			}
-        }else if(eventType.indexOf("onkey") >= 0){
-			document[eventType] = function(e){
-				var key = new Object();
-				key.keyCode = e.keyCode;
-				
-				/*if(!isIE){
-					key.keyCode = e.keyCode;	
-				}else{
-					key.keyCode = window.event.keyCode;	
-				}*/
-		   		eventReciever(key);
-			};
-        }else if(eventType.indexOf("onmouse") >= 0){
-			canvas[eventType] = function(e){
-					dispatchEvent(eventType, e);
-					//e.preventDefault();
-				};
-			thisClass.mouseEvents[eventType].push(eventReciever);
-        }else if(eventType.indexOf("ontouch") >= 0){
-			canvas[eventType] = eventReciever;
-        }
-		function dispatchEvent(type, e){
-			var mouse = thisClass.getMouse(e);
-			mouse.type = type;
-			for(var i = 0; i < thisClass.mouseEvents[type].length; i++){
-				thisClass.mouseEvents[type][i](mouse);   
-			}
-		}
-    };
-	this.removeEventListener = function(eventType, eventReciever){
-        // Layer.prototype = new Event;
-        if(eventType == Event.ENTER_FRAME){
-			gameEvents.splice(gameEvents.indexOf(eventReciever), 0);
-			if(gameEvents.length == 0){
-				//clearInterval(frames);
-			}
-		}else if(eventType.indexOf("onkey") >= 0){
-			document[eventType] = null;
-        }else if(eventType.indexOf("onmouse") >= 0){
-			thisClass.mouseEvents[eventType].splice(gameEvents.indexOf(eventReciever), 0);
-        }else if(eventType.indexOf("ontouch") >= 0){
-			canvas[eventType] = null;
-        }
-    };
 	if(supported(canvas)){
-		this.init();
-		
-        thisClass.addEventListener(MouseEvent.MOUSE_MOVE, function(e){ });
-		thisClass.addEventListener(MouseEvent.MOUSE_DOWN, function(e){ thisClass.mouseDown = true; });
-		thisClass.addEventListener(MouseEvent.MOUSE_UP, function(e){ thisClass.mouseDown = false; });
-		thisClass.addEventListener(MouseEvent.MOUSE_OVER, function(e){ thisClass.mouseOver = true; });
-		thisClass.addEventListener(MouseEvent.MOUSE_OUT, function(e){ thisClass.mouseOver = false; document.body.style.cursor= "default"; });
-
+        canvas[MouseEvent.MOUSE_MOVE] = function(e){
+                thisClass.dispatchEvent(MouseEvent.MOUSE_MOVE, thisClass.mouse(e));
+            
+                thisClass.mouseX = thisClass.mouse(e).x;
+                thisClass.mouseY = thisClass.mouse(e).y;
+        }
+        canvas[MouseEvent.MOUSE_DOWN] = function(e){
+                thisClass.mouseDown = true;
+                thisClass.dispatchEvent(MouseEvent.MOUSE_DOWN, thisClass.mouse(e));
+        }
+        canvas[MouseEvent.MOUSE_UP] = function(e){
+                thisClass.mouseDown = false;
+                thisClass.dispatchEvent(MouseEvent.MOUSE_UP, thisClass.mouse(e));
+        }
+        canvas[MouseEvent.MOUSE_OVER] = function(e){
+                thisClass.mouseOver = true;
+                thisClass.dispatchEvent(MouseEvent.MOUSE_OVER, thisClass.mouse(e));
+        }
+        canvas[MouseEvent.MOUSE_OUT] = function(e){
+                thisClass.mouseOver = false;
+                thisClass.dispatchEvent(MouseEvent.MOUSE_OUT, thisClass.mouse(e));
+                document.body.style.cursor= "default";
+        }
     }
     function supported(canvas){ 
 		
@@ -146,11 +83,6 @@ function Layer(canvasID, layerWidth, layerHeight){
 			backBuffer.width = layerWidth;
 			backBuffer.height = layerHeight;
 			
-			if(window.webkitRequestAnimationFrame){
-				requestAnimation = "webkitRequestAnimationFrame";
-			}else if(window.mozRequestAnimationFrame){
-				requestAnimation = "mozRequestAnimationFrame";
-			}
             return true;
         }
         else {
@@ -161,7 +93,6 @@ function Layer(canvasID, layerWidth, layerHeight){
     }
 	this.graphics = getContext2D();
 	function getContext2D(){
-		
 		return context2D;
 	}
 	this.clearFrame = function(){
@@ -169,15 +100,8 @@ function Layer(canvasID, layerWidth, layerHeight){
 		context2D.clearRect(0, 0, layerWidth, layerHeight);	
 	};
     this.draw = function(){
- 
-		
-		for (var x=0; x< gameEvents.length; x++)
-		{
-			var e = new Object();
-			e.type = Event.ENTER_FRAME;
-			gameEvents[x](e);
-			
-		}
+		thisClass.dispatchEvent(Event.ENTER_FRAME, {});
+        
 		if(thisClass.clearFrames)
 			backBufferContext2D.clearRect(0, 0, layerWidth, layerHeight);
 		
@@ -187,14 +111,6 @@ function Layer(canvasID, layerWidth, layerHeight){
         }
 		context2D.clearRect(0, 0, layerWidth, layerHeight);	
 		context2D.drawImage(backBuffer, 0, 0);
-		
-		
-		//if(window[requestAnimation]){
-		//	window[requestAnimation](thisClass.draw);
-		//}
-		
-		//if(document.getElementById("element"))
-			//document.getElementById("element").innerHTML = fps.check();
     };
 	this.renderObject = function(gameObject){
 		var mouse = new Object();
@@ -209,53 +125,44 @@ function Layer(canvasID, layerWidth, layerHeight){
 			backBufferContext2D.textBaseline = gameObject.textBaseline;
 			backBufferContext2D.fillText(gameObject.text, gameObject.x ,gameObject.y);		
 		}else{
+            var targetData = mouse;
+            targetData.target = gameObject; 
+            
 			if(gameObject.visible)	{	
-					function dispatchEvents(type){
-						for(var i = 0; i < gameObject.mouseEvents[type].length; i++){
-							var target = new Object();
-							target.x = mouse.x;
-							target.y = mouse.y;
-							target.target = gameObject;
-							target.type = type;
-							gameObject.mouseEvents[type][i](target); 
-							
-						}
-					}
 					if(thisClass.mouseOver){
 						if(!gameObject.mouseOver){
 							if(gameObject.hitTestPoint(mouse)){
 								gameObject.mouseOver = true;
-								dispatchEvents(MouseEvent.MOUSE_OVER);
+								gameObject.dispatchEvent(MouseEvent.MOUSE_OVER, targetData);
 								
 								if(gameObject.buttonMode == true){
 									document.body.style.cursor= "pointer";
 								}else{
 									document.body.style.cursor= "default";
 								}
-								
 							}
 						}else if(gameObject.mouseOver){
 							if(!gameObject.hitTestPoint(mouse)){
 								gameObject.mouseOver = false;
-								dispatchEvents(MouseEvent.MOUSE_OUT);
+								gameObject.dispatchEvent(MouseEvent.MOUSE_OUT, targetData);
 								document.body.style.cursor= "default";
 							}
 						}	
 					}else{
 						if(gameObject.mouseOver){
-							dispatchEvents(MouseEvent.MOUSE_OUT);
+							gameObject.dispatchEvent(MouseEvent.MOUSE_OUT, targetData);
 							gameObject.mouseOver = false;
 						}
 					}
 					
 					if(thisClass.mouseDown){
 						if(gameObject.hitTestPoint(mouse)){
-							dispatchEvents(MouseEvent.MOUSE_DOWN);
+							gameObject.dispatchEvent(MouseEvent.MOUSE_DOWN, targetData);
 							gameObject.mouseDown = true;
 						}
 					}else{
 						if(gameObject.mouseDown){
-							dispatchEvents(MouseEvent.MOUSE_UP);
+							gameObject.dispatchEvent(MouseEvent.MOUSE_UP, targetData);
 							gameObject.mouseDown = false;
 						}
 						
@@ -313,19 +220,21 @@ function Layer(canvasID, layerWidth, layerHeight){
 							var xPos;
 							var yPos;
 							if( gameObject.width > 0){
-								
 								if(!gameObject.isReady())
 									return;
-									
-								if(gameObject.isSprite){
-									currentImage = gameObject.image;
-								}else if(gameObject.isMovieClip){
-									currentImage = gameObject.image[gameObject.currentFrame];
-									if(!gameObject.stopFrame)
-										gameObject.updateFrames();
-								}
 								
-							
+                                switch(gameObject.constructor) {
+                                    case Sprite:
+                                        currentImage = gameObject.image;
+                                    break;
+                                    case MovieClip:
+                                        currentImage = gameObject.image[gameObject.currentFrame];
+                                        if(!gameObject.stopFrame)
+                                            gameObject.updateFrames();
+                                    break;
+                                    default:
+                                    break;
+                                }
 								if(gameObject.centerRegistrationPoint){
 									xPos = gameObject.x -((gameObject.width * gameObject.scaleX)/2);
 									yPos = gameObject.y -((gameObject.height * gameObject.scaleY)/2);
@@ -333,7 +242,7 @@ function Layer(canvasID, layerWidth, layerHeight){
 									xPos = gameObject.x;
 									yPos = gameObject.y;
 								}
-								if(gameObject.rotation){
+								if(gameObject.rotation != 0){
 									backBufferContext2D.save();
 									
 									backBufferContext2D.translate(xPos +((gameObject.width * gameObject.scaleX)/2),
@@ -345,19 +254,10 @@ function Layer(canvasID, layerWidth, layerHeight){
 									-((gameObject.height * gameObject.scaleY)/2),
 									gameObject.width*gameObject.scaleX,
 									gameObject.height*gameObject.scaleY);
-										
-									
 								}else{
 									backBufferContext2D.drawImage(currentImage, xPos, yPos,
 									gameObject.width*gameObject.scaleX,
 									gameObject.height*gameObject.scaleY);
-									
-									//backBufferContext2D.shadowOffsetX = 5;
-									//backBufferContext2D.shadowOffsetY = 5;
-									//backBufferContext2D.shadowBlur    = 4;
-									//backBufferContext2D.shadowColor   = "black";
-	
-								
 								}
 							}
 						}else{
@@ -374,15 +274,11 @@ function Layer(canvasID, layerWidth, layerHeight){
     {
         gameObjects.push(gameObject);
 		gameObject.parent = thisClass;
-		
 		thisClass.draw();
-		//thisClass.renderObject(gameObject);
     };
 	this.removeChild = function(gameObject)
     {
-		for(x in gameObjects){
-
-			
+		for(x in gameObjects){			
             if(gameObjects[x] == gameObject){
                 gameObjects.splice(x,1);
                 gameObject = -1;

@@ -3,13 +3,14 @@
 
 
 function Main() {
+    Renderer.start(30);
     
     var offSet = 0;
     var stageHeight = 400;
     var stageWidth = 400;
     var FPS = 60;
-    var stage = new Stage("canvas", stageWidth, stageHeight, FPS);
-   
+    var stage = new Layer("canvas", stageWidth, stageHeight, FPS);
+    Renderer.addLayer(stage);
 	var tile = new Array()
 	
 	var tiles = new Array();
@@ -43,7 +44,7 @@ function Main() {
 				
 			//}
 			tile[i][j].buttonMode = true;
-			tile[i][j].addEventListener(MouseEvent.MOUSE_OVER, onTileClick);	
+			tile[i][j].addListener(MouseEvent.MOUSE_OVER, onTileClick);	
 			
 		}
    

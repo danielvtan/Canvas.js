@@ -96,11 +96,11 @@ function Main() {
     
     function init(){
         
-        stage.addEventListener(Event.ENTER_FRAME, gameLoop);
+        stage.addListener(Event.ENTER_FRAME, gameLoop);
        // stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
-        stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+        stage.addListener(MouseEvent.MOUSE_MOVE, onMouseMove);
         //stage.addEventListener('TOUCH_START', onTouchStart);
-		stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouchMove);
+		stage.addListener(TouchEvent.TOUCH_MOVE, onTouchMove);
     }
 	function onTouchMove(e){
 		if (e.touches) {

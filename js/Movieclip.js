@@ -79,18 +79,18 @@ function MovieClipTest(){
 		addEvents();	
 	}
 	function addEvents(){
-		layer.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		layer.addEventListener(MouseEvent.MOUSE_OVER, onStageOver);
+		layer.addListener(Event.ENTER_FRAME, onEnterFrame);
+		layer.addListener(MouseEvent.MOUSE_OVER, onStageOver);
 		
-		layer.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		layer.addListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		
-		clip.addEventListener(MouseEvent.MOUSE_DOWN, onClipClick);
+		clip.addListener(MouseEvent.MOUSE_DOWN, onClipClick);
 		clip2.buttonMode = true;
-		clip2.addEventListener(MouseEvent.MOUSE_DOWN, onClipClick);
+		clip2.addListener(MouseEvent.MOUSE_DOWN, onClipClick);
 		
 		clip3.buttonMode = true;
-		clip3.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-		clip3.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+		clip3.addListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		clip3.addListener(MouseEvent.MOUSE_OUT, onMouseOut);
 		
 		//layer.addEventListener("TOUCH_START", onTouchStart);
 	}
