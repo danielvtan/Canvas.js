@@ -36,19 +36,16 @@ function Iso(){
 	
 	iso.buildMap(map);
 	
-	layer.addEventListener(MouseEvent.MOUSE_DOWN, function(e){
+	layer.addListener(MouseEvent.MOUSE_DOWN, function(e){
 		iso.getTarget();
 	});
 
-	layer.addEventListener(Event.ENTER_FRAME, function(){
+	layer.addListener(Event.ENTER_FRAME, function(){
 		iso.update();
 	});
 	
 	
 }
-
-
-
 
 function IsoCanvas(){
 	
@@ -232,7 +229,6 @@ function IsoCanvas(){
 		}
 	}
 	this.update = function(){
-		
 		//convert mouse coordinates from isometric back to normal
 		var mouseY = ((2 * layer.mouseY - layer.mouseX)/2);
 		var mouseX = (layer.mouseX + mouseY);

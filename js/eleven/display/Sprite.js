@@ -8,6 +8,8 @@ Sprite.prototype = new DisplayObject();
 Sprite.prototype.constructor = Sprite;
 function Sprite(imageLink)
 {
+    DisplayObject.apply(this, arguments);
+    
 	this.isSprite = true;
 	
 	
@@ -20,14 +22,12 @@ function Sprite(imageLink)
 	}
 	
 	var thisClass = this;
-	
-	this.init();
-	
-}
-Sprite.prototype.isReady = function(){
-	if(this.image.complete){
-		return true;	
-	}
-	return false;
-}
+    this.isReady = function(){
+        if(this.image.complete){
+            return true;	
+        }
+        return false;
+    }
 
+	
+}

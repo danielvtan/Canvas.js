@@ -9,6 +9,8 @@ MovieClip.prototype = new DisplayObject();
 MovieClip.prototype.constructor = MovieClip;
 function MovieClip(imageLink)
 {
+    DisplayObject.apply(this, arguments);
+    this.defaultTarget = undefined;
 	this.isMovieClip = true;
 	
 	this.currentFrame;
@@ -17,7 +19,6 @@ function MovieClip(imageLink)
 	this.frameDelay = 10;
 	this.ctrSpeed = 0;
 	this.stopFrame = false;
-	
 	
 	if(imageLink != undefined){
 		this.image = [];
@@ -30,47 +31,46 @@ function MovieClip(imageLink)
 			this.image[i].src = imageLink[i];
 			this.image[i].onload = function() {
 					thisClass.imageCount++;
-					console.log(thisClass.name + " " + thisClass.imageCount);
+					//console.log(thisClass.name + " " + thisClass.imageCount);
 				 };
 		}
 	}
 	
-	this.init();
-	
 	var thisClass = this;
-}
-MovieClip.prototype.isReady = function(){
-	if(this.imageCount >= this.totalFrames){
-		return true;	
-	}
-	return false;
-}
-MovieClip.prototype.updateFrames = function(){
-	if(this.ctrSpeed >= this.frameDelay){
-		this.currentFrame++;	
-		if(this.currentFrame >= this.totalFrames){
-			this.currentFrame = 0;	
-		}else{
-			
-		}
-		this.ctrSpeed = 0;
-	}
-	
-	this.ctrSpeed++;
-};
-MovieClip.prototype.gotoAndStop = function(frame){
-	this.stopFrame = true;
-	this.currentFrame = frame;
-};
-MovieClip.prototype.gotoAndPlay = function(frame){
-	this.stopFrame = false;
-	this.currentFrame = frame;
-};
-MovieClip.prototype.play = function(){
-	this.stopFrame = false;
-};
-MovieClip.prototype.stop = function(){
-	this.stopFrame = true;
-};
+    
+    this.isReady = function(){
+        if(thisClass.imageCount >= thisClass.totalFrames){
+            return true;	
+        }
+        return false;
+    }
+    this.updateFrames = function(){
+        if(thisClass.ctrSpeed >= thisClass.frameDelay){
+            thisClass.currentFrame++;	
+            if(thisClass.currentFrame >= thisClass.totalFrames){
+                thisClass.currentFrame = 0;	
+            }else{
+                
+            }
+            thisClass.ctrSpeed = 0;
+        }
+        
+        thisClass.ctrSpeed++;
+    };
+   this.gotoAndStop = function(frame){
+        thisClass.stopFrame = true;
+        thisClass.currentFrame = frame;
+    };
+    this.gotoAndPlay = function(frame){
+        thisClass.stopFrame = false;
+        thisClass.currentFrame = frame;
+    };
+    this.play = function(){
+        thisClass.stopFrame = false;
+    };
+    this.stop = function(){
+        thisClass.stopFrame = true;
+    };
 
+}
 

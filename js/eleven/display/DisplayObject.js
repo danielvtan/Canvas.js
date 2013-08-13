@@ -8,6 +8,9 @@
 DisplayObject.prototype = new EventDispatcher();
 DisplayObject.prototype.constructor = DisplayObject;
 function DisplayObject(){
+    
+    EventDispatcher.apply(this, arguments);
+    
 	this.width = 0;
 	this.height = 0;
 	this.scaleX = 1;
@@ -32,41 +35,38 @@ function DisplayObject(){
 	this.parent;
 	
 	var thisClass = this;
+    
+    this.mouseOver = false;
+    this.mouseDown = false;
+    this.mouseX;
+    this.mouseY;
 	
-	
-	
-	
-}
-DisplayObject.prototype.addEventListener = function(eventType, eventReciever){
-	
-	this.mouseEvents[eventType].push(eventReciever);
-};
-DisplayObject.prototype.hitTestPoint = function(point){
-	if(this.y + this.height > point.y && this.x + this.width > point.x && this.x < point.x && this.y < point.y){
-	 	return true;
-	}
-	return false;
-};
-DisplayObject.prototype.hitTestObject = function(gameObject){
-	if(gameObject == -1)
-		return false;	
-	
-	if(this.y + this.height > gameObject.y && this.x + this.width > gameObject.x && this.x < gameObject.x + gameObject.width  && this.y < gameObject.y + gameObject.height){
+    this.hitTestPoint = function(point){
+        if(thisClass.y + thisClass.height > point.y && thisClass.x + thisClass.width > point.x && thisClass.x < point.x && thisClass.y < point.y){
+            return true;
+        }
+        return false;
+    };
+    this.hitTestObject = function(gameObject){
+        if(gameObject == -1)
+            return false;	
+        if(thisClass.y + thisClass.height > gameObject.y && thisClass.x + thisClass.width > gameObject.x && thisClass.x < gameObject.x + gameObject.width  && thisClass.y < gameObject.y + gameObject.height){
+            return true;
+        }
+    };
+    this.drawArc = function(x, y,radius, startAngle, endAngle, anticlockwise){
+        thisClass.arc = new Object();
+        thisClass.arc.x = x;
+        thisClass.arc.y = y;
+        thisClass.arc.radius = radius;
+        thisClass.arc.startAngle = startAngle;
+        thisClass.arc.endAngle = endAngle;
+        thisClass.arc.anticlockwise = anticlockwise;
+    };
+   this.getArc = function(){
 		
-		return true;
-	}
-};
-DisplayObject.prototype.drawArc = function(x, y,radius, startAngle, endAngle, anticlockwise){
-	this.arc = new Object();
-	this.arc.x = x;
-	this.arc.y = y;
-	this.arc.radius = radius;
-	this.arc.startAngle = startAngle;
-	this.arc.endAngle = endAngle;
-	this.arc.anticlockwise = anticlockwise;
-};
-DisplayObject.prototype.getArc = function(){
-		
-		return this.arc;
+		return thisClass.arc;
 	};
+
+}
 
