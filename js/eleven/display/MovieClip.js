@@ -1,49 +1,22 @@
-/**
-*	eleven js
-*	@author Daniel Tan
-*   @email daniel@eleventap.com
-*	
-*/
-
 MovieClip.prototype = new DisplayObject();
 MovieClip.prototype.constructor = MovieClip;
-function MovieClip(imageLink)
-{
+function MovieClip() {
     DisplayObject.apply(this, arguments);
-    this.defaultTarget = undefined;
-	this.isMovieClip = true;
-	
-	this.currentFrame;
+    
+    this.width = this.texture.data[0][2];
+    this.height = this.texture.data[0][3];
+
+	this.currentFrame = 0;
 	this.totalFrames;
 	
 	this.frameDelay = 10;
 	this.ctrSpeed = 0;
 	this.stopFrame = false;
 	
-	if(imageLink != undefined){
-		this.image = [];
-		this.totalFrames = imageLink.length;
-		this.currentFrame = 0;
-		this.imageLoaded = false;
-		this.imageCount = 0;
-		for(var i = 0; i< imageLink.length; i++){
-			this.image[i] = new Image();
-			this.image[i].src = imageLink[i];
-			this.image[i].onload = function() {
-					thisClass.imageCount++;
-					//console.log(thisClass.name + " " + thisClass.imageCount);
-				 };
-		}
-	}
-	
 	var thisClass = this;
     
-    this.isReady = function(){
-        if(thisClass.imageCount >= thisClass.totalFrames){
-            return true;	
-        }
-        return false;
-    }
+    this.totalFrames = this.texture.data.length;
+    
     this.updateFrames = function(){
         if(thisClass.ctrSpeed >= thisClass.frameDelay){
             thisClass.currentFrame++;	

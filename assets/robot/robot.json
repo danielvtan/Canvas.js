@@ -1,0 +1,33 @@
+{
+"images": ["robot.png"],
+"frames": [
+
+    [48, 192, 48, 48], 
+    [48, 144, 48, 48], 
+    [0, 192, 48, 48], 
+    [0, 144, 48, 48], 
+    [48, 96, 48, 48], 
+    [0, 96, 48, 48], 
+    [48, 48, 48, 48], 
+    [0, 48, 48, 48], 
+    [48, 0, 48, 48], 
+    [0, 0, 48, 48]
+],
+"animations": {
+    
+        "robot1":[0], 
+        "robot10":[1], 
+        "robot2":[2], 
+        "robot3":[3], 
+        "robot4":[4], 
+        "robot5":[5], 
+        "robot6":[6], 
+        "robot7":[7], 
+        "robot8":[8], 
+        "robot9":[9]
+},
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:5acaa0bae43ad676a4b8b96e67d14bf9$",
+        "Created with TexturePacker (http://www.texturepacker.com) for EasalJS"
+]
+}

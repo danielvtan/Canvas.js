@@ -25,15 +25,14 @@ function Renderer(){
 		thisClass.stop();
 		thisClass.FPS = fps;
 		frames = setInterval(function(){
-			var totalFrames = thisClass.layers.length;
-			for(var i = 0; i < totalFrames; ++i){
-				thisClass.layers[i].draw();
-			}
-			
+			thisClass.renderLayers();
 		}, 1000 / thisClass.FPS);
 	};
-	this.renderLayer = function(){
-		
+	this.renderLayers = function(){
+		var totalFrames = thisClass.layers.length;
+        for(var i = 0; i < totalFrames; ++i){
+            thisClass.layers[i].draw();
+        }
 	};
 	this.stop = function(){
 		clearInterval(frames);	

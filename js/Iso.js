@@ -4,8 +4,9 @@ var iso;
 
 var backLayer;
 
-function Iso(){
+var Gfx = {};
 
+function Iso(){
 	Renderer.start(30);
 	
 	var stats = new Stats();
@@ -14,9 +15,9 @@ function Iso(){
 	
 	
 
-	 var layerHeight = 400;
-	 var layerWidth = 300;
-	 layer = new Layer("canvas", layerWidth, layerHeight);
+    var layerHeight = 400;
+    var layerWidth = 300;
+    layer = new Layer("canvas", layerWidth, layerHeight);
 	
 	backLayer = new Layer("backCanvas", layerWidth, layerHeight);
 	
@@ -30,21 +31,34 @@ function Iso(){
 				[1, 0, 0, 0, 0, 0, 0, 0, 1],
 				[1, 1, 1, 1, 1, 1, 1, 1, 1]];
 
-	iso = new IsoCanvas();
-	iso.createTile({name:"Tile0", walkable:true, imageURL:"images/iso/tile1.png"});
-	iso.createTile({name:"Tile1", walkable:false, imageURL:"images/iso/tile2.png"});
-	
-	iso.buildMap(map);
-	
-	layer.addListener(MouseEvent.MOUSE_DOWN, function(e){
-		iso.getTarget();
-	});
-
-	layer.addListener(Event.ENTER_FRAME, function(){
-		iso.update();
-	});
-	
-	
+	function initIso() {
+        iso = new IsoCanvas();
+        iso.createTile({name:"Tile0", walkable:true, texture:Gfx.tile1});
+        iso.createTile({name:"Tile1", walkable:false, texture:Gfx.tile2});
+        
+        iso.buildMap(map);
+        
+        layer.addListener(MouseEvent.MOUSE_DOWN, function(e){
+            iso.getTarget();
+        });
+    
+        layer.addListener(Event.ENTER_FRAME, function(){
+            iso.update();
+        });
+    }
+    
+	Loader.load("images/iso/tile1.png", function(tile1){
+        Gfx.tile1 = { texture:tile1, data:[0, 0, 60, 30]};
+        Loader.load("images/iso/tile2.png", function(tile2){
+            Gfx.tile2 = { texture:tile2, data:[0, 0, 60, 40]};
+            Loader.load("images/iso/mouse.png", function(mouse){
+                Gfx.mouse = { texture:mouse, data:[0, 0, 60, 30]};
+                initIso();
+            });
+        })
+    });
+    
+    
 }
 
 function IsoCanvas(){
@@ -88,19 +102,15 @@ function IsoCanvas(){
 
 				//make new tile object in the game
 				mapObject[name] = new mapObject["Tile"+map[i][j]]();
-
-				var tile = new Sprite(mapObject[name].imageURL);
+               
+				var tile = new Sprite(mapObject[name].texture);
 				tile.name = name;
 				tile.x = (j-i)*mapObject.tileW;
 				tile.y = (j+i)*mapObject.tileW/2;
 				if (mapObject[name].walkable){
 					backLayer.addChild(tile);
 
-					tile.width = 60;
-					tile.height = 30;
 				}else{
-					tile.width = 60;
-					tile.height = 40;
 					tile.y -=10;
 					
 					layer.addChild(tile);
@@ -122,9 +132,7 @@ function IsoCanvas(){
 		//attach mouse cursor
 		//_root.attachMovie("mouse", "mouse", 2);
 
-		mouse = new Sprite("images/iso/mouse.png");
-		mouse.width = 60;
-		mouse.height = 30
+		mouse = new Sprite(Gfx.mouse);
 		mouse.name = "mouse";
 		layer.addChild(mouse);
 
@@ -207,7 +215,7 @@ function IsoCanvas(){
 		
 
 		var tile = "t_" + (mapObject.mouseY) + "_" + (mapObject.mouseX)
-		trace(tile);
+		console.log(tile);
 
 		//must click on walkable tile
 		try{
@@ -218,14 +226,12 @@ function IsoCanvas(){
 				mapObject.targetY = mapObject.mouseY;
 				//get moving
 				//char.moving = true;
-
-
-				trace(tile);
+				console.log(tile);
 			}
 
 
 		}catch(e){
-			trace(e)
+			console.log(e)
 		}
 	}
 	this.update = function(){

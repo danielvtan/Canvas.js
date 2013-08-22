@@ -90,38 +90,3 @@ function EventDispatcher() {
     }
 	
 }
-
-/*
-function EventDispatcher(){
-	
-	
-	
-	//this.mouseOver = false;
-	//this.mouseDown = false;
-	
-	//this.mouseEvents = new Object();
-	//this.mouseEvents[MouseEvent.MOUSE_UP] = new Array();
-	//this.mouseEvents[MouseEvent.MOUSE_MOVE] = new Array();
-	//this.mouseEvents[MouseEvent.MOUSE_DOWN] = new Array();
-	//this.mouseEvents[MouseEvent.MOUSE_OVER] = new Array();
-	//this.mouseEvents[MouseEvent.MOUSE_OUT] = new Array();
-	
-	//this.mouseX;
-	//this.mouseY;
-	
-	this.mouseEvents = {};
-    this.mouseEvents[MouseEvent.MOUSE_UP] = []
-    this.mouseEvents[MouseEvent.MOUSE_MOVE] = []
-    this.mouseEvents[MouseEvent.MOUSE_DOWN] = []
-    this.mouseEvents[MouseEvent.MOUSE_OVER] = []
-    this.mouseEvents[MouseEvent.MOUSE_OUT] = []
-    
-    this.mouseOver = false;
-    this.mouseDown = false;
-    
-    this.mouseX;
-    this.mouseY;
-}
-
-
-*/
